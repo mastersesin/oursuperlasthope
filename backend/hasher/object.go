@@ -153,6 +153,7 @@ func (o *Object) SetModTime(ctx context.Context, mtime time.Time) error {
 func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (r io.ReadCloser, err error) {
 	size := o.Size()
 	var offset, limit int64 = 0, -1
+	fmt.Println(offset, limit)
 	for _, option := range options {
 		switch opt := option.(type) {
 		case *fs.SeekOption:
