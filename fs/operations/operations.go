@@ -985,6 +985,7 @@ func CountStringField(count int64, humanReadable bool, rawWidth int) string {
 //
 // Lists in parallel which may get them out of order
 func List(ctx context.Context, f fs.Fs, w io.Writer) error {
+	fmt.Println("List function called with config")
 	ci := fs.GetConfig(ctx)
 	return ListFn(ctx, f, func(o fs.Object) {
 		syncFprintf(w, "%s %s\n", SizeStringField(o.Size(), ci.HumanReadable, 9), o.Remote())

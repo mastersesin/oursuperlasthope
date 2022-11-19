@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/rclone/rclone/lib/atexit"
 	"log"
 	"os"
 	"regexp"
@@ -14,7 +15,6 @@ import (
 	"github.com/rclone/rclone/fs/filter/filterflags"
 	"github.com/rclone/rclone/fs/log/logflags"
 	"github.com/rclone/rclone/fs/rc/rcflags"
-	"github.com/rclone/rclone/lib/atexit"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"golang.org/x/text/cases"
@@ -153,6 +153,7 @@ var helpBackend = &cobra.Command{
 
 // runRoot implements the main rclone command with no subcommands
 func runRoot(cmd *cobra.Command, args []string) {
+	fmt.Println("hoho")
 	if version {
 		ShowVersion()
 		resolveExitCode(nil)
@@ -170,6 +171,7 @@ func runRoot(cmd *cobra.Command, args []string) {
 //
 // Helpful example: https://github.com/moby/moby/blob/master/cli/cobra.go
 func setupRootCommand(rootCmd *cobra.Command) {
+	fmt.Printf("Root with sub-command run here at function setupRootCommand\n")
 	ci := fs.GetConfig(context.Background())
 	// Add global flags
 	configflags.AddFlags(ci, pflag.CommandLine)

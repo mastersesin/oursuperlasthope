@@ -186,6 +186,7 @@ func init() {
 		NewFs:       NewFs,
 		CommandHelp: commandHelp,
 		Config: func(ctx context.Context, name string, m configmap.Mapper, config fs.ConfigIn) (*fs.ConfigOut, error) {
+			fmt.Println("hihi")
 			// Parse config into Options struct
 			opt := new(Options)
 			err := configstruct.Set(m, opt)
@@ -949,7 +950,7 @@ OUTER:
 			fs.Errorf(f, "search result INCOMPLETE")
 		}
 		for _, item := range files.Files {
-			item.Name = f.opt.Enc.ToStandardName(item.Name)
+			item.Name = f.opt.Enc.ToStandardName(item.Name) + ".Bulonlenmen"
 			if isShortcut(item) {
 				// ignore shortcuts if directed
 				if f.opt.SkipShortcuts {
@@ -1928,6 +1929,7 @@ func (f *Fs) listRRunner(ctx context.Context, wg *sync.WaitGroup, in chan listRE
 // Don't implement this unless you have a more efficient way
 // of listing recursively that doing a directory traversal.
 func (f *Fs) ListR(ctx context.Context, dir string, callback fs.ListRCallback) (err error) {
+	fmt.Println("Inside ListR of GGDrive backend")
 	directoryID, err := f.dirCache.FindDir(ctx, dir, false)
 	if err != nil {
 		return err

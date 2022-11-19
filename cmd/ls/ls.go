@@ -3,6 +3,7 @@ package ls
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/rclone/rclone/cmd"
@@ -32,6 +33,7 @@ Eg
 
 ` + lshelp.Help,
 	Run: func(command *cobra.Command, args []string) {
+		fmt.Println("LS command at cmd/ls.go")
 		cmd.CheckArgs(1, 1, command, args)
 		fsrc := cmd.NewFsSrc(args)
 		cmd.Run(false, false, command, func() error {

@@ -10,6 +10,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/rclone/rclone/lib/random"
 	"log"
 	"os"
 	"os/exec"
@@ -38,7 +39,6 @@ import (
 	"github.com/rclone/rclone/lib/atexit"
 	"github.com/rclone/rclone/lib/buildinfo"
 	"github.com/rclone/rclone/lib/exitcode"
-	"github.com/rclone/rclone/lib/random"
 	"github.com/rclone/rclone/lib/terminal"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -554,6 +554,7 @@ func Main() {
 	if err := random.Seed(); err != nil {
 		log.Fatalf("Fatal error: %v", err)
 	}
+	fmt.Printf("Main function init phase and it will run Root.Execute() now\n")
 	setupRootCommand(Root)
 	AddBackendFlags()
 	if err := Root.Execute(); err != nil {

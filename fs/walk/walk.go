@@ -146,6 +146,7 @@ func (l ListType) Filter(in *fs.DirEntries) {
 //
 // NB (f, path) to be replaced by fs.Dir at some point
 func ListR(ctx context.Context, f fs.Fs, path string, includeAll bool, maxLevel int, listType ListType, fn fs.ListRCallback) error {
+	fmt.Println("inside ListR")
 	fi := filter.GetConfig(ctx)
 	// FIXME disable this with --no-fast-list ??? `--disable ListR` will do it...
 	doListR := f.Features().ListR
@@ -285,6 +286,7 @@ func (dm *dirMap) sendEntries(fn fs.ListRCallback) (err error) {
 
 // listR walks the file tree using ListR
 func listR(ctx context.Context, f fs.Fs, path string, includeAll bool, listType ListType, fn fs.ListRCallback, doListR fs.ListRFn, synthesizeDirs bool) error {
+	fmt.Println("Inside listR")
 	fi := filter.GetConfig(ctx)
 	includeDirectory := fi.IncludeDirectory(ctx, f)
 	if !includeAll {
