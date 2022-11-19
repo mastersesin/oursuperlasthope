@@ -157,9 +157,11 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (r io.ReadC
 	for _, option := range options {
 		switch opt := option.(type) {
 		case *fs.SeekOption:
+			fmt.Println(opt.Offset)
 			offset = opt.Offset
 		case *fs.RangeOption:
 			offset, limit = opt.Decode(size)
+			fmt.Println(offset)
 		}
 	}
 	if offset < 0 {
