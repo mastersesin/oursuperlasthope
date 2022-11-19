@@ -195,7 +195,7 @@ func (cr *ChunkedReader) Open() (*ChunkedReader, error) {
 // A length <= 0 will request till the end of the file
 func (cr *ChunkedReader) openRange() error {
 	offset, length := cr.chunkOffset, cr.chunkSize
-	fmt.Println(cr.o, "ChunkedReader.openRange at %d length %d", offset, length)
+	fmt.Println(cr.o, "offset, length, io.SeekStart", offset, length, io.SeekStart)
 	fs.Debugf(cr.o, "ChunkedReader.openRange at %d length %d", offset, length)
 
 	if cr.closed {
