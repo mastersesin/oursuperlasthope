@@ -951,7 +951,7 @@ OUTER:
 		}
 		for _, item := range files.Files {
 			item.Name = f.opt.Enc.ToStandardName(item.Name)
-			if item.MimeType == driveFolderType {
+			if item.MimeType != driveFolderType {
 				item.Name = item.Name + ".plot"
 			}
 			if isShortcut(item) {
