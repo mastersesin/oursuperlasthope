@@ -210,8 +210,10 @@ func (cr *ChunkedReader) openRange() error {
 		}
 		if err != nil {
 			fs.Debugf(cr.o, "ChunkedReader.openRange seek failed (%s). Trying Open", err)
+			fmt.Println(cr.o, "ChunkedReader.openRange seek failed (%s). Trying Open", err)
 		} else {
 			fs.Debugf(cr.o, "ChunkedReader.openRange seeked to wrong offset. Wanted %d, got %d. Trying Open", offset, n)
+			fmt.Println(cr.o, "ChunkedReader.openRange seeked to wrong offset. Wanted %d, got %d. Trying Open", offset, n)
 		}
 	}
 
