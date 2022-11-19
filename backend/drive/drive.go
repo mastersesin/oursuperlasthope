@@ -3727,6 +3727,7 @@ func (o *baseObject) open(ctx context.Context, url string, options ...fs.OpenOpt
 
 // Open an object for read
 func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (in io.ReadCloser, err error) {
+	fmt.Println("(o *Object)")
 	if o.mimeType == shortcutMimeTypeDangling {
 		return nil, errors.New("can't read dangling shortcut")
 	}
@@ -3748,6 +3749,7 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (in io.Read
 	return o.baseObject.open(ctx, o.url, options...)
 }
 func (o *documentObject) Open(ctx context.Context, options ...fs.OpenOption) (in io.ReadCloser, err error) {
+	fmt.Println("(o *documentObject)")
 	// Update the size with what we are reading as it can change from
 	// the HEAD in the listing to this GET. This stops rclone marking
 	// the transfer as corrupted.
@@ -3780,6 +3782,7 @@ func (o *documentObject) Open(ctx context.Context, options ...fs.OpenOption) (in
 	return
 }
 func (o *linkObject) Open(ctx context.Context, options ...fs.OpenOption) (in io.ReadCloser, err error) {
+	fmt.Println("(o *linkObject)")
 	var offset, limit int64 = 0, -1
 	var data = o.content
 	for _, option := range options {
