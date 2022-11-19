@@ -2219,6 +2219,7 @@ func (o *Object) newLinearReader(ctx context.Context, offset, limit int64, optio
 }
 
 func (r *linearReader) nextChunk(offset int64) (int64, error) {
+	fmt.Println(offset)
 	if r.err != nil {
 		return -1, r.err
 	}
