@@ -351,6 +351,8 @@ func (w *worker) String() string {
 //   - if it doesn't support seeking it will close a possible existing one and open at the desired offset
 //   - if there's no reader associated with this worker, it will create one
 func (w *worker) reader(offset, end int64, closeOpen bool) (io.ReadCloser, error) {
+	fmt.Println(offset)
+	fmt.Println("355")
 	var err error
 	r := w.rc
 	if w.rc == nil {
