@@ -3705,6 +3705,7 @@ func isGoogleError(err error, what string) bool {
 
 // open a url for reading
 func (o *baseObject) open(ctx context.Context, url string, options ...fs.OpenOption) (in io.ReadCloser, err error) {
+	fmt.Println(options)
 	_, res, err := o.httpResponse(ctx, url, "GET", options)
 	if err != nil {
 		if isGoogleError(err, "cannotDownloadAbusiveFile") {
