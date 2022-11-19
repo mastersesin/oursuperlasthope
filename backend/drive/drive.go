@@ -3667,6 +3667,7 @@ type openDocumentFile struct {
 
 // Read bytes from the object - see io.Reader
 func (file *openDocumentFile) Read(p []byte) (n int, err error) {
+	fmt.Println(file.in)
 	n, err = file.in.Read(p)
 	file.bytes += int64(n)
 	if err != nil && err != io.EOF {
