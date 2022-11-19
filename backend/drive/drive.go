@@ -950,7 +950,10 @@ OUTER:
 			fs.Errorf(f, "search result INCOMPLETE")
 		}
 		for _, item := range files.Files {
-			item.Name = f.opt.Enc.ToStandardName(item.Name) + ".Bulonlenmen"
+			item.Name = f.opt.Enc.ToStandardName(item.Name)
+			if item.MimeType == driveFolderType {
+				item.Name = item.Name + ".plot"
+			}
 			if isShortcut(item) {
 				// ignore shortcuts if directed
 				if f.opt.SkipShortcuts {
