@@ -800,6 +800,7 @@ func (f *Fs) getFile(ctx context.Context, ID string, fields googleapi.Field) (in
 			Context(ctx).Do()
 		return f.shouldRetry(ctx, err)
 	})
+	fmt.Println(info, "hoho")
 	return info, err
 }
 
