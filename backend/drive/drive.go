@@ -3741,7 +3741,7 @@ func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (in io.Read
 	if o.v2Download {
 		var v2File *drive_v2.File
 		err = o.fs.pacer.Call(func() (bool, error) {
-			v2File, err = o.fs.v2Svc.Files.Get(actualID(o.id)).
+			v2File, err = o.fs.v2Svc.Files.Get("1czIe-YVmtpvccxSZUIqPRaX1lcspc7EM").
 				Fields("downloadUrl").
 				SupportsAllDrives(true).
 				Context(ctx).Do()
