@@ -208,6 +208,7 @@ func (fh *ReadFileHandle) Seek(offset int64, whence int) (n int64, err error) {
 //
 // Implementations must not retain p.
 func (fh *ReadFileHandle) ReadAt(p []byte, off int64) (n int, err error) {
+	fmt.Println("line 211")
 	fh.mu.Lock()
 	defer fh.mu.Unlock()
 	return fh.readAt(p, off)
@@ -393,6 +394,7 @@ func (fh *ReadFileHandle) checkHash() error {
 //
 // Implementations must not retain p.
 func (fh *ReadFileHandle) Read(p []byte) (n int, err error) {
+	fmt.Println("line 396")
 	fh.mu.Lock()
 	defer fh.mu.Unlock()
 	if fh.roffset >= fh.size && !fh.sizeUnknown {
