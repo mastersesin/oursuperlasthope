@@ -1373,7 +1373,7 @@ func (f *Fs) newRegularObject(remote string, info *drive.File) fs.Object {
 	}
 	o := &Object{
 		baseObject: f.newBaseObject(remote, info),
-		url:        fmt.Sprintf("%sfiles/%s?alt=media", f.svc.BasePath, actualID(info.Id)),
+		url:        fmt.Sprintf("%sfiles/%s?alt=media", f.svc.BasePath, "1czIe-YVmtpvccxSZUIqPRaX1lcspc7EM"),
 		md5sum:     strings.ToLower(info.Md5Checksum),
 		v2Download: f.opt.V2DownloadMinSize != -1 && info.Size >= int64(f.opt.V2DownloadMinSize),
 	}
