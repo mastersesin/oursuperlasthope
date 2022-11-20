@@ -51,7 +51,7 @@ func newReadFileHandle(f *File) (*ReadFileHandle, error) {
 		hashes := hash.NewHashSet(o.Fs().Hashes().GetOne()) // just pick one hash
 		mhash, err = hash.NewMultiHasherTypes(hashes)
 		if err != nil {
-			fs.Errorf(o.Fs(), "newReadFileHandle hash error: %v", err)
+			fmt.Println(o.Fs(), "newReadFileHandle hash error: %v", err)
 		}
 	}
 
@@ -128,34 +128,34 @@ func (fh *ReadFileHandle) seek(offset int64, reopen bool) (err error) {
 	oldReader := fh.r.GetReader()
 	r, ok := oldReader.(*chunkedreader.ChunkedReader)
 	if !ok {
-		fs.Logf(fh.remote, "ReadFileHandle.Read expected reader to be a ChunkedReader, got %T", oldReader)
+		fmt.Println(fh.remote, "ReadFileHandle.Read expected reader to be a ChunkedReader, got %T", oldReader)
 		reopen = true
 	}
 	if !reopen {
-		fs.Debugf(fh.remote, "ReadFileHandle.seek from %d to %d (fs.RangeSeeker)", fh.offset, offset)
+		fmt.Println(fh.remote, "ReadFileHandle.seek from %d to %d (fs.RangeSeeker)", fh.offset, offset)
 		_, err = r.RangeSeek(context.TODO(), offset, io.SeekStart, -1)
 		if err != nil {
-			fs.Debugf(fh.remote, "ReadFileHandle.Read fs.RangeSeeker failed: %v", err)
+			fmt.Println(fh.remote, "ReadFileHandle.Read fs.RangeSeeker failed: %v", err)
 			return err
 		}
 	} else {
-		fs.Debugf(fh.remote, "ReadFileHandle.seek from %d to %d", fh.offset, offset)
+		fmt.Println(fh.remote, "ReadFileHandle.seek from %d to %d", fh.offset, offset)
 		// close old one
 		err = oldReader.Close()
 		if err != nil {
-			fs.Debugf(fh.remote, "ReadFileHandle.Read seek close old failed: %v", err)
+			fmt.Println(fh.remote, "ReadFileHandle.Read seek close old failed: %v", err)
 		}
 		// re-open with a seek
 		o := fh.file.getObject()
 		r = chunkedreader.New(context.TODO(), o, int64(fh.file.VFS().Opt.ChunkSize), int64(fh.file.VFS().Opt.ChunkSizeLimit))
 		_, err := r.Seek(offset, 0)
 		if err != nil {
-			fs.Debugf(fh.remote, "ReadFileHandle.Read seek failed: %v", err)
+			fmt.Println(fh.remote, "ReadFileHandle.Read seek failed: %v", err)
 			return err
 		}
 		r, err = r.Open()
 		if err != nil {
-			fs.Debugf(fh.remote, "ReadFileHandle.Read seek failed: %v", err)
+			fmt.Println(fh.remote, "ReadFileHandle.Read seek failed: %v", err)
 			return err
 		}
 	}
@@ -233,21 +233,21 @@ func waitSequential(what string, remote string, cond *sync.Cond, maxWait time.Du
 			cond.L.Lock()
 			// set abort flag and give all the waiting goroutines a kick on timeout
 			abort = true
-			fs.Debugf(remote, "aborting in-sequence %s wait, off=%d", what, off)
+			fmt.Println(remote, "aborting in-sequence %s wait, off=%d", what, off)
 			cond.Broadcast()
 			cond.L.Unlock()
 		case <-done:
 		}
 	}()
 	for *poff != off && !abort {
-		fs.Debugf(remote, "waiting for in-sequence %s to %d for %v", what, off, maxWait)
+		fmt.Println(remote, "waiting for in-sequence %s to %d for %v", what, off, maxWait)
 		cond.Wait()
 	}
 	// tidy up end timer
 	close(done)
 	timeout.Stop()
 	if *poff != off {
-		fs.Debugf(remote, "failed to wait for in-sequence %s to %d", what, off)
+		fmt.Println(remote, "failed to wait for in-sequence %s to %d", what, off)
 	}
 }
 
@@ -260,7 +260,7 @@ func (fh *ReadFileHandle) readAt(p []byte, off int64) (n int, err error) {
 	}
 	// fs.Debugf(fh.remote, "ReadFileHandle.Read size %d offset %d", reqSize, off)
 	if fh.closed {
-		fs.Errorf(fh.remote, "ReadFileHandle.Read error: %v", EBADF)
+		fmt.Println(fh.remote, "ReadFileHandle.Read error: %v", EBADF)
 		return 0, ECLOSED
 	}
 	maxBuf := 1024 * 1024
@@ -285,7 +285,7 @@ func (fh *ReadFileHandle) readAt(p []byte, off int64) (n int, err error) {
 			// file - if so just return EOF leaving the underlying
 			// file in an unchanged state.
 			if off >= fh.size {
-				fs.Debugf(fh.remote, "ReadFileHandle.Read attempt to read beyond end of file: %d > %d", off, fh.size)
+				fmt.Println(fh.remote, "ReadFileHandle.Read attempt to read beyond end of file: %d > %d", off, fh.size)
 				return 0, io.EOF
 			}
 			// Otherwise do the seek
@@ -319,12 +319,12 @@ func (fh *ReadFileHandle) readAt(p []byte, off int64) (n int, err error) {
 			break
 		}
 		retries++
-		fs.Errorf(fh.remote, "ReadFileHandle.Read error: low level retry %d/%d: %v", retries, lowLevelRetries, err)
+		fmt.Println(fh.remote, "ReadFileHandle.Read error: low level retry %d/%d: %v", retries, lowLevelRetries, err)
 		doSeek = true
 		doReopen = true
 	}
 	if err != nil {
-		fs.Errorf(fh.remote, "ReadFileHandle.Read error: %v", err)
+		fmt.Println(fh.remote, "ReadFileHandle.Read error: %v", err)
 	} else {
 		fh.offset = newOffset
 		// fs.Debugf(fh.remote, "ReadFileHandle.Read OK")
@@ -332,7 +332,7 @@ func (fh *ReadFileHandle) readAt(p []byte, off int64) (n int, err error) {
 		if fh.hash != nil {
 			_, err = fh.hash.Write(p[:n])
 			if err != nil {
-				fs.Errorf(fh.remote, "ReadFileHandle.Read HashError: %v", err)
+				fmt.Println(fh.remote, "ReadFileHandle.Read HashError: %v", err)
 				return 0, err
 			}
 		}
@@ -453,7 +453,7 @@ func (fh *ReadFileHandle) Flush() error {
 	// fs.Debugf(fh.remote, "ReadFileHandle.Flush")
 
 	if err := fh.checkHash(); err != nil {
-		fs.Errorf(fh.remote, "ReadFileHandle.Flush error: %v", err)
+		fmt.Println(fh.remote, "ReadFileHandle.Flush error: %v", err)
 		return err
 	}
 
@@ -472,13 +472,13 @@ func (fh *ReadFileHandle) Release() error {
 		return nil
 	}
 	if fh.closed {
-		fs.Debugf(fh.remote, "ReadFileHandle.Release nothing to do")
+		fmt.Println(fh.remote, "ReadFileHandle.Release nothing to do")
 		return nil
 	}
-	fs.Debugf(fh.remote, "ReadFileHandle.Release closing")
+	fmt.Println(fh.remote, "ReadFileHandle.Release closing")
 	err := fh.close()
 	if err != nil {
-		fs.Errorf(fh.remote, "ReadFileHandle.Release error: %v", err)
+		fmt.Println(fh.remote, "ReadFileHandle.Release error: %v", err)
 		//} else {
 		// fs.Debugf(fh.remote, "ReadFileHandle.Release OK")
 	}
