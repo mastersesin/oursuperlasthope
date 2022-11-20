@@ -476,6 +476,8 @@ func decodeOpenFlags(flags int) string {
 
 // OpenFile a file according to the flags and perm provided
 func (vfs *VFS) OpenFile(name string, flags int, perm os.FileMode) (fd Handle, err error) {
+	fmt.Println(name)
+	fmt.Println(flags)
 	defer log.Trace(name, "flags=%s, perm=%v", decodeOpenFlags(flags), perm)("fd=%v, err=%v", &fd, &err)
 
 	// http://pubs.opengroup.org/onlinepubs/7908799/xsh/open.html
