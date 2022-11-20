@@ -3733,6 +3733,8 @@ func (o *baseObject) open(ctx context.Context, url string, options ...fs.OpenOpt
 // Open an object for read
 func (o *Object) Open(ctx context.Context, options ...fs.OpenOption) (in io.ReadCloser, err error) {
 	fmt.Println("(o *Object)")
+	fmt.Println(o.id)
+	fmt.Println(actualID(o.id))
 	if o.mimeType == shortcutMimeTypeDangling {
 		return nil, errors.New("can't read dangling shortcut")
 	}
