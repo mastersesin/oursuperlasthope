@@ -26,6 +26,7 @@ var _ fusefs.HandleReader = (*FileHandle)(nil)
 func (fh *FileHandle) Read(ctx context.Context, req *fuse.ReadRequest, resp *fuse.ReadResponse) (err error) {
 	fmt.Println(req)
 	fmt.Println(resp)
+	fmt.Println(fh, "len=%d, offset=%d", req.Size, req.Offset)("read=%d, err=%v", &n, &err)
 	var n int
 	defer log.Trace(fh, "len=%d, offset=%d", req.Size, req.Offset)("read=%d, err=%v", &n, &err)
 	data := make([]byte, req.Size)
