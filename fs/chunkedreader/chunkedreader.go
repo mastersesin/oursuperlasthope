@@ -61,6 +61,7 @@ func New(ctx context.Context, o fs.Object, initialChunkSize int64, maxChunkSize 
 
 // Read from the file - for details see io.Reader
 func (cr *ChunkedReader) Read(p []byte) (n int, err error) {
+	fmt.Println(p)
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 
