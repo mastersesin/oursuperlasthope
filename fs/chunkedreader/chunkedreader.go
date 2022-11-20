@@ -73,7 +73,7 @@ func (cr *ChunkedReader) Read(p []byte) (n int, err error) {
 		// the current chunk boundary. valid only when chunkSize > 0
 		chunkEnd := cr.chunkOffset + cr.chunkSize
 
-		fs.Debugf(cr.o, "ChunkedReader.Read at %d length %d chunkOffset %d chunkSize %d", cr.offset, reqSize, cr.chunkOffset, cr.chunkSize)
+		fmt.Println(cr.o, "ChunkedReader.Read at %d length %d chunkOffset %d chunkSize %d", cr.offset, reqSize, cr.chunkOffset, cr.chunkSize)
 
 		switch {
 		case cr.chunkSize > 0 && cr.offset == chunkEnd: // last chunk read completely
@@ -147,7 +147,7 @@ func (cr *ChunkedReader) RangeSeek(ctx context.Context, offset int64, whence int
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 
-	fs.Debugf(cr.o, "ChunkedReader.RangeSeek from %d to %d length %d", cr.offset, offset, length)
+	fmt.Println(cr.o, "ChunkedReader.RangeSeek from %d to %d length %d", cr.offset, offset, length)
 
 	if cr.closed {
 		return 0, ErrorFileClosed
@@ -197,7 +197,7 @@ func (cr *ChunkedReader) Open() (*ChunkedReader, error) {
 func (cr *ChunkedReader) openRange() error {
 	offset, length := cr.chunkOffset, cr.chunkSize
 	fmt.Println(cr.o, "offset, length, io.SeekStart", offset, length, io.SeekStart)
-	fs.Debugf(cr.o, "ChunkedReader.openRange at %d length %d", offset, length)
+	fmt.Println(cr.o, "ChunkedReader.openRange at %d length %d", offset, length)
 
 	if cr.closed {
 		return ErrorFileClosed
@@ -210,10 +210,10 @@ func (cr *ChunkedReader) openRange() error {
 			return nil
 		}
 		if err != nil {
-			fs.Debugf(cr.o, "ChunkedReader.openRange seek failed (%s). Trying Open", err)
+			fmt.Println(cr.o, "ChunkedReader.openRange seek failed (%s). Trying Open", err)
 			fmt.Println(cr.o, "ChunkedReader.openRange seek failed (%s). Trying Open", err)
 		} else {
-			fs.Debugf(cr.o, "ChunkedReader.openRange seeked to wrong offset. Wanted %d, got %d. Trying Open", offset, n)
+			fmt.Println(cr.o, "ChunkedReader.openRange seeked to wrong offset. Wanted %d, got %d. Trying Open", offset, n)
 			fmt.Println(cr.o, "ChunkedReader.openRange seeked to wrong offset. Wanted %d, got %d. Trying Open", offset, n)
 		}
 	}
